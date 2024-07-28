@@ -6,7 +6,7 @@ const { connectDB, closeDB } = require('../config/database');
 
 describe('Auth Endpoints', () => {
    beforeAll(async () => {
-      await connectDB();
+      await connectDB(process.env.TEST_DB);
     });
   
     beforeEach(async () => {

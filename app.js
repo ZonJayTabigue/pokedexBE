@@ -9,13 +9,16 @@ const { connectDB } = require('./config/database');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var pokemonRouter = require('./routes/pokemon');
+
 var authMiddleware  = require('./middleware/authMiddleware');
 
 var app = express();
 
 
+
 // Connect to the database
-connectDB();
+connectDB(process.env.DB_Name);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-
+app.use('/pokemon', pokemonRouter);
 
 app.use( authMiddleware );
 // pokemon protected routes 

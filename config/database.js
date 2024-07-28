@@ -3,7 +3,7 @@ require('dotenv').config();
 
 let isConnected;
 
-const connectDB = async () => {
+const connectDB = async (db_name) => {
 
   if (isConnected) {
     console.log('MongoDB is already connected');
@@ -11,7 +11,7 @@ const connectDB = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(`${process.env.MONGO_URI}/${db_name}`);
     isConnected = mongoose.connection.readyState;
     console.log('MongoDB connected successfully');
   } catch (err) {
