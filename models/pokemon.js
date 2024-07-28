@@ -7,7 +7,11 @@ const pokemonSchema = new mongoose.Schema({
   base_experience: Number,
   image_url: String,
   types: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Type' }],
-  abilities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ability' }]
+  abilities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ability' }],
+  stats: [{
+    stat: { type: mongoose.Schema.Types.ObjectId, ref: 'Stat' },
+    value: { type: Number, required: true },
+  }],
 });
 
 module.exports = mongoose.model('Pokemon', pokemonSchema);

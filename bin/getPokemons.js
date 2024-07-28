@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Pokemon = require('../models/pokemon');
 const Type = require('../models/type');
 const Ability = require('../models/ability');
+const Stat = require('../models/stat');
 const axios = require('axios');
 require('dotenv').config();
 const cliProgress = require('cli-progress');
@@ -38,6 +39,15 @@ const savePokemon = async (pokemonData) => {
       return ability;
     }));
 
+    const stats = await Promise.all(pokemonData.stats.map(async (statInfo) => {
+      let stat = await Stat.findOne({ name: statInfo.stat.name });
+      if (!stat) {
+        stat = new Stat({ name: statInfo.stat.name });
+        await stat.save();
+      }
+      return { stat: stat._id, value: statInfo.base_stat };
+    }));
+
     const pokemon = new Pokemon({
       name: pokemonData.name,
       height: pokemonData.height,
@@ -45,7 +55,8 @@ const savePokemon = async (pokemonData) => {
       base_experience: pokemonData.base_experience,
       image_url: pokemonData.sprites.front_default,
       types: types.map(type => type._id),
-      abilities: abilities.map(ability => ability._id)
+      abilities: abilities.map(ability => ability._id),
+      stats: stats
     });
 
     await pokemon.save();
