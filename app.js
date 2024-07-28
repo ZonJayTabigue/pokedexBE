@@ -9,6 +9,8 @@ const { connectDB } = require('./config/database');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var pokemonRouter = require('./routes/pokemon');
+
 var authMiddleware  = require('./middleware/authMiddleware');
 
 var app = express();
@@ -26,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-
+app.use('/pokemon', pokemonRouter);
 
 app.use( authMiddleware );
 // pokemon protected routes 
