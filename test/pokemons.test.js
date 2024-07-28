@@ -11,7 +11,7 @@ const { connectDB, closeDB } = require('../config/database');
 describe('Pokemon API', () => {
 
   beforeAll(async () => {
-    await connectDB();
+    await connectDB(process.env.TEST_DB);
     const user = new User({ username: 'testuser', password: 'testpassword' });
     await user.save();
     token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);

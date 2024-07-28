@@ -16,8 +16,9 @@ var authMiddleware  = require('./middleware/authMiddleware');
 var app = express();
 
 
+
 // Connect to the database
-connectDB();
+connectDB(process.env.DB_Name);
 
 app.use(logger('dev'));
 app.use(express.json());
