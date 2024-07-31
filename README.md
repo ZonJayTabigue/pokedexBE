@@ -14,7 +14,7 @@ Fourth is to run the get-pokemons script
    - npm run get-pokemons
 
 Fifth is to copy the .env file I attached to the email.
-   - paste it inside the pokedexFE folder
+   - paste it inside the pokedexBE folder
 
 Sixth is running the application
    - npm start
