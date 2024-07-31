@@ -16,6 +16,10 @@ const getPokemonData = async (url) => {
   return res.data;
 };
 
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const savePokemon = async (pokemonData) => {
 
   try {
@@ -23,7 +27,9 @@ const savePokemon = async (pokemonData) => {
 
       let type = await Type.findOne({ name: typeInfo.type.name });
       if (!type) {
-        type = new Type({ name: typeInfo.type.name });
+        type = new Type({ 
+          name: typeInfo.type.name,
+        });
         await type.save();
       }
       return type;
@@ -53,7 +59,7 @@ const savePokemon = async (pokemonData) => {
       height: pokemonData.height,
       weight: pokemonData.weight,
       base_experience: pokemonData.base_experience,
-      image_url: pokemonData.sprites.front_default,
+      image_url: `https://img.pokemondb.net/artwork/large/${pokemonData.name}.jpg`,
       types: types.map(type => type._id),
       abilities: abilities.map(ability => ability._id),
       stats: stats

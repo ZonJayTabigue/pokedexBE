@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  title: Pokemon API
+  version: 1.0.0
+  description: API for managing Pokemon entries
+
+paths:
+  /pokemon/create:
+    $ref: './paths/pokemon/createPokemon.yaml#/paths/~1pokemon~1create'
+  /pokemon/update/{_id}:
+    $ref: './paths/pokemon/updatePokemon.yaml#/paths/~1pokemon~1update~1{_id}'
+  /pokemon/delete/{_id}:
+    $ref: './paths/pokemon/deletePokemon.yaml#/paths/~1pokemon~1delete~1{_id}'
+  /pokemon:
+    $ref: './paths/pokemon/getAllPokemons.yaml#/paths/~1pokemon'
+  /pokemon/{_id}:
+    $ref: './paths/pokemon/getPokemon.yaml#/paths/~1pokemon~1{_id}'
+  /auth/login:
+    $ref: './paths/auth/login.yaml#/paths/~1auth~1login'
+  /auth/register:
+    $ref: './paths/auth/register.yaml#/paths/~1auth~1register'
+  /auth/logout:
+    $ref: './paths/auth/logout.yaml#/paths/~1auth~1logout'
+  /stats:
+    $ref: './paths/pokemon/getAllStats.yaml#/paths/~1stats'
+  /types:
+    $ref: './paths/pokemon/getTypes.yaml#/paths/~1types'
+  
+
+components:
+  schemas:
+    Pokemon:
+      $ref: './paths/pokemon/createPokemon.yaml#/components/schemas/Pokemon'
+    PokemonUpdate:
+      $ref: './paths/pokemon/updatePokemon.yaml#/components/schemas/PokemonUpdate'
+    Stat:
+      $ref: './paths/pokemon/getAllStats.yaml#/components/schemas/Stat'
+    Type:
+      $ref: './paths/pokemon/getTypes.yaml#/components/schemas/Type'
+
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+tags:
+  - name: Pokemon
+    description: Operations related to Pokemon
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Stats
+    description: Operations related to stats
+  - name: Types
+    description: Operations related to types

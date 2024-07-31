@@ -1,0 +1,94 @@
+paths:
+  /pokemon/{_id}:
+    get:
+      summary: Get a Pokemon by ID
+      description: Retrieves a Pokemon entry by its ID, including populated details for types, abilities, and stats.
+      tags:
+        - Pokemon
+      parameters:
+        - name: _id
+          in: path
+          description: The ID of the Pokemon to retrieve
+          required: true
+          schema:
+            type: string
+            example: "5f8f8c44b54764421b7160cd"
+      responses:
+        '200':
+          description: Pokemon retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pokemon'
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unable to find Pokemon'
+        '500':
+          description: Error retrieving Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving Pokemon'
+
+components:
+  schemas:
+    Pokemon:
+      type: object
+      description: A Pokemon entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: "5f8f8c44b54764421b7160cd"
+        name:
+          type: string
+          example: "Pikachu"
+        height:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6
+        base_experience:
+          type: number
+          example: 112
+        image_url:
+          type: string
+          example: "https://example.com/image.png"
+        types:
+          type: array
+          items:
+            type: string
+          example: ["electric"]
+        abilities:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "static"
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              stat:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "speed"
+              value:
+                type: number
+                example: 90

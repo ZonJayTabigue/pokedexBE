@@ -8,7 +8,8 @@ const updatePokemon = async (req,res) => {
       base_experience,
       image_url,
       types,
-      abilities
+      abilities,
+      stats
    } = req.body;
    try {
       const updatedPokemon = await Pokemon.findByIdAndUpdate(
@@ -19,7 +20,8 @@ const updatePokemon = async (req,res) => {
             base_experience,
             image_url,
             types,
-            abilities
+            abilities,
+            stats
          },
          { new: true }
        );

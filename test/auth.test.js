@@ -3,10 +3,11 @@ const request = require('supertest');
 const app = require('../app');
 const User = require('../models/user');
 const { connectDB, closeDB } = require('../config/database');
+require('dotenv').config();
 
 describe('Auth Endpoints', () => {
-   beforeAll(async () => {
-      await connectDB(process.env.TEST_DB);
+    beforeAll(async () => {
+      await connectDB(process.env.TEST_DB, 'auth.test.js');
     });
   
     beforeEach(async () => {
@@ -14,10 +15,12 @@ describe('Auth Endpoints', () => {
     });
   
     afterAll(async () => {
+      await User.deleteMany({});
       await closeDB();
     });  
 
   describe('POST /auth/register', () => {
+
     it('should register a new user', async () => {
       const res = await request(app)
         .post('/auth/register')
@@ -26,7 +29,7 @@ describe('Auth Endpoints', () => {
           password: 'testpassword'
         });
 
-      expect(res.statusCode).toBe(201);
+      expect(res.statusCode).toBe(200);
       expect(res.body).toHaveProperty('message', 'User registered successfully');
     });
 

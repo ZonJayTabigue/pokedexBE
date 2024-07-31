@@ -13,8 +13,9 @@ module.exports.register = async(req, res)  => {
       user = new User({ username, password });
       await user.save();
 
-      res.status(201).json({ message: 'User registered successfully' });
+      res.status(200).json({ message: 'User registered successfully' });
    } catch (e)  {
+      console.log(e);
       res.status(500).json({ message: `Something went wrong: ${e.message}` });
    }
 }

@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const Type = require('./type');
+const Ability = require('./ability');
+const Stat = require('./stat');
 
 const pokemonSchema = new mongoose.Schema({
   name: String,

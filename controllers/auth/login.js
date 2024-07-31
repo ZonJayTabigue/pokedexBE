@@ -15,7 +15,7 @@ module.exports.login = async(req, res) => {
 
       const token = jwt.sign({ userId: user._id }, jwtKey, { expiresIn: '7d' });
       res.cookie('token', token, { httpOnly: true });
-      res.json({ message: 'Logged in successfully', token });
+      res.status(200).json({ message: 'Logged in successfully', token });
 
    } catch (e) {
       res.status(500).json({ message: `Something went wrong: ${e.message}` });

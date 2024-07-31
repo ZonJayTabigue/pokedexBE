@@ -7,11 +7,12 @@ const Type = require('../models/type');
 const Ability = require('../models/pokemon');
 const jwt = require('jsonwebtoken');
 const { connectDB, closeDB } = require('../config/database');
+require('dotenv').config();
 
 describe('Pokemon API', () => {
 
   beforeAll(async () => {
-    await connectDB(process.env.TEST_DB);
+    await connectDB(process.env.TEST_DB, 'pokemons.test.js');
     const user = new User({ username: 'testuser', password: 'testpassword' });
     await user.save();
     token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
@@ -26,7 +27,7 @@ describe('Pokemon API', () => {
   it('should list all Pokemon (unauthenticated)', async () => {
     const res = await request(app).get('/pokemon');
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body).toHaveProperty('pokemons');
   });
 
   it('should create a new Pokemon (authenticated)', async () => {

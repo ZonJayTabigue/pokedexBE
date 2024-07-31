@@ -1,0 +1,41 @@
+paths:
+  /stats:
+    get:
+      summary: Retrieve all stats
+      description: Fetches a list of all stats from the database.
+      tags:
+        - Stats
+      responses:
+        '200':
+          description: Successfully retrieved the list of stats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stat'
+        '500':
+          description: Error retrieving stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving stats: Some error message'
+components:
+  schemas:
+    Stat:
+      type: object
+      description: A stat entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: "5f8f8c44b54764421b7160cd"
+        name:
+          type: string
+          example: "speed"
+        value:
+          type: number
+          example: 90
