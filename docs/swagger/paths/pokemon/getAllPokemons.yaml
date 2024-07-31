@@ -1,0 +1,102 @@
+openapi: 3.0.0
+paths:
+  /pokemon:
+    get:
+      summary: Get all Pokemon
+      description: Retrieves a list of Pokemon with optional search and pagination.
+      tags:
+        - Pokemon
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: string
+            example: '1'
+        - name: search
+          in: query
+          description: Search query to filter Pokemon by name or type
+          required: false
+          schema:
+            type: string
+            example: pikachu
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pokemons:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pokemon'
+                  totalPages:
+                    type: integer
+                    example: 10
+                  currentPage:
+                    type: integer
+                    example: 1
+        '500':
+          description: Error retrieving Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error retrieving Pokemon
+components:
+  schemas:
+    Pokemon:
+      type: object
+      description: A Pokemon entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: "5f8f8c44b54764421b7160cd"
+        name:
+          type: string
+          example: "Pikachu"
+        height:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6
+        base_experience:
+          type: number
+          example: 112
+        image_url:
+          type: string
+          example: "https://example.com/image.png"
+        types:
+          type: array
+          items:
+            type: string
+          example: ["electric"]
+        abilities:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "static"
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              stat:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "speed"
+              value:
+                type: number
+                example: 90

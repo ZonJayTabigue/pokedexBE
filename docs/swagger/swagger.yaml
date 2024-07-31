@@ -1,0 +1,781 @@
+openapi: 3.0.0
+info:
+  title: Pokemon API
+  version: 1.0.0
+  description: API for managing Pokemon entries
+paths:
+  /pokemon/create:
+    post:
+      summary: Create a new Pokemon
+      description: Creates a new Pokemon entry in the database.
+      tags:
+        - Pokemon
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: The Pokemon to create
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - height
+                - weight
+                - base_experience
+                - image_url
+                - types
+                - abilities
+                - stats
+              properties:
+                name:
+                  type: string
+                  example: Pikachu
+                height:
+                  type: number
+                  example: 0.4
+                weight:
+                  type: number
+                  example: 6
+                base_experience:
+                  type: number
+                  example: 112
+                image_url:
+                  type: string
+                  example: 'https://example.com/image.png'
+                types:
+                  type: array
+                  items:
+                    type: string
+                  example:
+                    - electric
+                abilities:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                  example:
+                    - name: static
+                    - name: lightning-rod
+                stats:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      stat:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                      value:
+                        type: number
+                  example:
+                    - stat:
+                        name: speed
+                      value: 90
+                    - stat:
+                        name: attack
+                      value: 55
+      responses:
+        '201':
+          description: Pokemon created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Pokemon'
+                  message:
+                    type: string
+                    example: Pokemon created successfully
+        '500':
+          description: Error creating Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error creating Pokemon
+  '/pokemon/update/{_id}':
+    put:
+      summary: Update a Pokemon by ID
+      description: Updates a Pokemon entry by its ID with the provided data.
+      tags:
+        - Pokemon
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: _id
+          in: path
+          description: The ID of the Pokemon to update
+          required: true
+          schema:
+            type: string
+            example: 5f8f8c44b54764421b7160cd
+      requestBody:
+        description: The data to update the Pokemon with
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PokemonUpdate'
+      responses:
+        '200':
+          description: Pokemon updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pokemon updated
+                  data:
+                    type: object
+                    description: A Pokemon entry with various attributes.
+                    properties:
+                      _id:
+                        type: string
+                        example: 5f8f8c44b54764421b7160cd
+                      name:
+                        type: string
+                        example: Pikachu
+                      height:
+                        type: number
+                        example: 0.4
+                      weight:
+                        type: number
+                        example: 6
+                      base_experience:
+                        type: number
+                        example: 112
+                      image_url:
+                        type: string
+                        example: 'https://example.com/image.png'
+                      types:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - electric
+                      abilities:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: static
+                        example:
+                          - name: static
+                          - name: lightning-rod
+                      stats:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            stat:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  example: speed
+                            value:
+                              type: number
+                              example: 90
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pokemon not found
+        '500':
+          description: Error updating Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error updating Pokemon
+  '/pokemon/delete/{_id}':
+    delete:
+      summary: Delete a Pokemon by ID
+      description: Deletes a Pokemon entry by its ID from the database.
+      tags:
+        - Pokemon
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: _id
+          in: path
+          description: The ID of the Pokemon to delete
+          required: true
+          schema:
+            type: string
+            example: 5f8f8c44b54764421b7160cd
+      responses:
+        '200':
+          description: Pokemon deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pokemon Deleted
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Pokemon not found
+        '500':
+          description: Error deleting Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error deleting Pokemon
+  /pokemon:
+    get:
+      summary: Get all Pokemon
+      description: Retrieves a list of Pokemon with optional search and pagination.
+      tags:
+        - Pokemon
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: string
+            example: '1'
+        - name: search
+          in: query
+          description: Search query to filter Pokemon by name or type
+          required: false
+          schema:
+            type: string
+            example: pikachu
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pokemons:
+                    type: array
+                    items:
+                      type: object
+                      description: A Pokemon entry with various attributes.
+                      properties:
+                        _id:
+                          type: string
+                          example: 5f8f8c44b54764421b7160cd
+                        name:
+                          type: string
+                          example: Pikachu
+                        height:
+                          type: number
+                          example: 0.4
+                        weight:
+                          type: number
+                          example: 6
+                        base_experience:
+                          type: number
+                          example: 112
+                        image_url:
+                          type: string
+                          example: 'https://example.com/image.png'
+                        types:
+                          type: array
+                          items:
+                            type: string
+                          example:
+                            - electric
+                        abilities:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                example: static
+                        stats:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              stat:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                    example: speed
+                              value:
+                                type: number
+                                example: 90
+                  totalPages:
+                    type: integer
+                    example: 10
+                  currentPage:
+                    type: integer
+                    example: 1
+        '500':
+          description: Error retrieving Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error retrieving Pokemon
+  '/pokemon/{_id}':
+    get:
+      summary: Get a Pokemon by ID
+      description: 'Retrieves a Pokemon entry by its ID, including populated details for types, abilities, and stats.'
+      tags:
+        - Pokemon
+      parameters:
+        - name: _id
+          in: path
+          description: The ID of the Pokemon to retrieve
+          required: true
+          schema:
+            type: string
+            example: 5f8f8c44b54764421b7160cd
+      responses:
+        '200':
+          description: Pokemon retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                description: A Pokemon entry with various attributes.
+                properties:
+                  _id:
+                    type: string
+                    example: 5f8f8c44b54764421b7160cd
+                  name:
+                    type: string
+                    example: Pikachu
+                  height:
+                    type: number
+                    example: 0.4
+                  weight:
+                    type: number
+                    example: 6
+                  base_experience:
+                    type: number
+                    example: 112
+                  image_url:
+                    type: string
+                    example: 'https://example.com/image.png'
+                  types:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - electric
+                  abilities:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: static
+                  stats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        stat:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: speed
+                        value:
+                          type: number
+                          example: 90
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unable to find Pokemon
+        '500':
+          description: Error retrieving Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Error retrieving Pokemon
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticates a user and returns a JWT token for authenticated requests.
+      tags:
+        - Authentication
+      requestBody:
+        description: User credentials required for login
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: exampleUser
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged in successfully
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTYyMzkwMjQyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        '400':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Invalid credentials
+        '500':
+          description: Error during login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Something went wrong: {error_message}'
+  /auth/register:
+    post:
+      summary: User registration
+      description: Registers a new user with the provided username and password.
+      tags:
+        - Authentication
+      requestBody:
+        description: User credentials required for registration
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: newUser
+                password:
+                  type: string
+                  example: securePassword123
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+        '400':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User already exists
+        '500':
+          description: Error during registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Something went wrong: {error_message}'
+  /auth/logout:
+    post:
+      summary: User logout
+      description: Logs out the user by clearing the authentication token.
+      tags:
+        - Authentication
+      responses:
+        '200':
+          description: User logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Logged out successfully
+        '500':
+          description: Error during logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Something went wrong during logout
+  /stats:
+    get:
+      summary: Retrieve all stats
+      description: Fetches a list of all stats from the database.
+      tags:
+        - Stats
+      responses:
+        '200':
+          description: Successfully retrieved the list of stats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stat'
+        '500':
+          description: Error retrieving stats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving stats: Some error message'
+  /types:
+    get:
+      summary: Retrieve all types
+      description: Fetches a list of all types from the database.
+      tags:
+        - Types
+      responses:
+        '200':
+          description: Successfully retrieved the list of types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Type'
+        '500':
+          description: Error retrieving types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving types: Some error message'
+components:
+  schemas:
+    Pokemon:
+      type: object
+      description: A Pokemon entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: 5f8f8c44b54764421b7160cd
+        name:
+          type: string
+          example: Pikachu
+        height:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6
+        base_experience:
+          type: number
+          example: 112
+        image_url:
+          type: string
+          example: 'https://example.com/image.png'
+        types:
+          type: array
+          items:
+            type: string
+          example:
+            - electric
+        abilities:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: static
+          example:
+            - name: static
+            - name: lightning-rod
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              stat:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: speed
+              value:
+                type: number
+                example: 90
+          example:
+            - stat:
+                name: speed
+              value: 90
+            - stat:
+                name: attack
+              value: 55
+    PokemonUpdate:
+      type: object
+      description: The data required to update a Pokemon.
+      properties:
+        name:
+          type: string
+          example: Pikachu
+        height:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6
+        base_experience:
+          type: number
+          example: 112
+        image_url:
+          type: string
+          example: 'https://example.com/image.png'
+        types:
+          type: array
+          items:
+            type: string
+          example:
+            - electric
+        abilities:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: static
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              stat:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: speed
+              value:
+                type: number
+                example: 90
+    Stat:
+      type: object
+      description: A stat entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: 5f8f8c44b54764421b7160cd
+        name:
+          type: string
+          example: speed
+        value:
+          type: number
+          example: 90
+    Type:
+      type: object
+      description: A type entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: 5f8f8c44b54764421b7160cd
+        name:
+          type: string
+          example: fire
+        description:
+          type: string
+          example: Fire type Pokémon are typically strong against Grass and Bug types.
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+tags:
+  - name: Pokemon
+    description: Operations related to Pokemon
+  - name: Authentication
+    description: User authentication and authorization
+  - name: Stats
+    description: Operations related to stats
+  - name: Types
+    description: Operations related to types

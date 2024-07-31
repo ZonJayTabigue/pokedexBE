@@ -1,0 +1,41 @@
+paths:
+  /types:
+    get:
+      summary: Retrieve all types
+      description: Fetches a list of all types from the database.
+      tags:
+        - Types
+      responses:
+        '200':
+          description: Successfully retrieved the list of types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Type'
+        '500':
+          description: Error retrieving types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error retrieving types: Some error message'
+components:
+  schemas:
+    Type:
+      type: object
+      description: A type entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: "5f8f8c44b54764421b7160cd"
+        name:
+          type: string
+          example: "fire"
+        description:
+          type: string
+          example: "Fire type Pokémon are typically strong against Grass and Bug types."

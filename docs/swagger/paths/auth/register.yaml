@@ -1,0 +1,55 @@
+paths:
+  /auth/register:
+    post:
+      summary: User registration
+      description: Registers a new user with the provided username and password.
+      tags:
+        - Authentication
+      requestBody:
+        description: User credentials required for registration
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: "newUser"
+                password:
+                  type: string
+                  example: "securePassword123"
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User registered successfully'
+        '400':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User already exists'
+        '500':
+          description: Error during registration
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Something went wrong: {error_message}'
