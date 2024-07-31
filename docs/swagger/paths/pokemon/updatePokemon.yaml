@@ -1,0 +1,158 @@
+paths:
+  /pokemon/update/{_id}:
+    put:
+      summary: Update a Pokemon by ID
+      description: Updates a Pokemon entry by its ID with the provided data.
+      tags:
+        - Pokemon
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: _id
+          in: path
+          description: The ID of the Pokemon to update
+          required: true
+          schema:
+            type: string
+            example: "5f8f8c44b54764421b7160cd"
+      requestBody:
+        description: The data to update the Pokemon with
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PokemonUpdate'
+      responses:
+        '200':
+          description: Pokemon updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Pokemon updated'
+                  data:
+                    $ref: '#/components/schemas/Pokemon'
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Pokemon not found'
+        '500':
+          description: Error updating Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error updating Pokemon'
+components:
+  schemas:
+    Pokemon:
+      type: object
+      description: A Pokemon entry with various attributes.
+      properties:
+        _id:
+          type: string
+          example: "5f8f8c44b54764421b7160cd"
+        name:
+          type: string
+          example: "Pikachu"
+        height:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6
+        base_experience:
+          type: number
+          example: 112
+        image_url:
+          type: string
+          example: "https://example.com/image.png"
+        types:
+          type: array
+          items:
+            type: string
+          example: ["electric"]
+        abilities:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "static"
+          example:
+            - name: "static"
+            - name: "lightning-rod"
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              stat:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "speed"
+              value:
+                type: number
+                example: 90
+
+    PokemonUpdate:
+      type: object
+      description: The data required to update a Pokemon.
+      properties:
+        name:
+          type: string
+          example: "Pikachu"
+        height:
+          type: number
+          example: 0.4
+        weight:
+          type: number
+          example: 6
+        base_experience:
+          type: number
+          example: 112
+        image_url:
+          type: string
+          example: "https://example.com/image.png"
+        types:
+          type: array
+          items:
+            type: string
+          example: ["electric"]
+        abilities:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "static"
+        stats:
+          type: array
+          items:
+            type: object
+            properties:
+              stat:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "speed"
+              value:
+                type: number
+                example: 90

@@ -1,0 +1,48 @@
+paths:
+  /pokemon/delete/{_id}:
+    delete:
+      summary: Delete a Pokemon by ID
+      description: Deletes a Pokemon entry by its ID from the database.
+      tags:
+        - Pokemon
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: _id
+          in: path
+          description: The ID of the Pokemon to delete
+          required: true
+          schema:
+            type: string
+            example: "5f8f8c44b54764421b7160cd"
+      responses:
+        '200':
+          description: Pokemon deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Pokemon Deleted'
+        '404':
+          description: Pokemon not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Pokemon not found'
+        '500':
+          description: Error deleting Pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Error deleting Pokemon'
